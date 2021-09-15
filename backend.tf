@@ -8,5 +8,13 @@ terraform {
 }
 
 provider "aws" {
+  profile = "default"
   region = "us-east-1"
+  default_tags {
+    tags = {
+      Environment = "Test"
+      Project = "Role_Assumption"
+      Owner = "James L"
+    }
+  }
 }
