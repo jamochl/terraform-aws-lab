@@ -12,7 +12,7 @@ resource "aws_s3_bucket_policy" "allow_role" {
     Id      = "Allow_Specific_Role"
     Statement = [
       {
-        Sid = "Explicit Deny"
+        Sid    = "Explicit Deny"
         Effect = "Deny"
         Action = "s3:*"
         Resource = [
@@ -22,21 +22,21 @@ resource "aws_s3_bucket_policy" "allow_role" {
         Condition = {
           StringNotLike = {
             "aws:userid" = [
-              "${}:*",
+              //"${}:*",
               "${data.aws_user.root.user_id}"
             ]
           }
         }
       },
       {
-        Sid       = "Allow Role from assumed"
-        Effect    = "Allow"
+        Sid    = "Allow Role from assumed"
+        Effect = "Allow"
         Principal = {
           AWS = [
-            "${}",
+            //"${}",
           ]
         }
-        Action    = "s3:*"
+        Action = "s3:*"
         Resource = [
           aws_s3_bucket.bucket.arn,
           "${aws_s3_bucket.bucket.arn}/*",
@@ -47,5 +47,5 @@ resource "aws_s3_bucket_policy" "allow_role" {
 }
 
 data "aws_user" "root" {
-    user_name = "cloud_user"
+  user_name = "cloud_user"
 }
