@@ -12,9 +12,10 @@ resource "aws_s3_bucket_policy" "allow_role" {
     Id      = "Allow_Specific_Role"
     Statement = [
       {
-        Sid    = "Explicit Deny"
-        Effect = "Deny"
-        Action = "s3:*"
+        Sid       = "ExplicitDeny"
+        Effect    = "Deny"
+        Principal = "*"
+        Action    = "s3:GetObject"
         Resource = [
           aws_s3_bucket.bucket.arn,
           "${aws_s3_bucket.bucket.arn}/*",
@@ -22,30 +23,28 @@ resource "aws_s3_bucket_policy" "allow_role" {
         Condition = {
           StringNotLike = {
             "aws:userid" = [
-              //"${}:*",
-              "${data.aws_user.root.user_id}"
+              "${aws_iam_role.assume_to_s3.unique_id}:*"
             ]
           }
         }
       },
       {
-        Sid    = "Allow Role from assumed"
-        Effect = "Allow"
-        Principal = {
-          AWS = [
-            //"${}",
-          ]
-        }
-        Action = "s3:*"
+        Sid       = "AllowRolefromAssumed"
+        Effect    = "Allow"
+        Principal = "*"
+        Action    = "s3:GetObject"
         Resource = [
           aws_s3_bucket.bucket.arn,
           "${aws_s3_bucket.bucket.arn}/*",
         ]
+        Condition = {
+          StringNotLike = {
+            "aws:userid" = [
+              "${aws_iam_role.assume_to_s3.unique_id}:*"
+            ]
+          }
+        }
       },
     ]
   })
-}
-
-data "aws_user" "root" {
-  user_name = "cloud_user"
 }

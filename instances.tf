@@ -10,7 +10,7 @@ data "aws_ssm_parameter" "amazon-linux-2" {
   name = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
 }
 
-resource "aws_instance" "web" {
+resource "aws_instance" "bastion" {
   ami                         = data.aws_ssm_parameter.amazon-linux-2.value
   instance_type               = "t3a.micro"
   key_name                    = aws_key_pair.deployer.key_name
