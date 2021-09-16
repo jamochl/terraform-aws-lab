@@ -16,6 +16,7 @@ resource "aws_instance" "web" {
   key_name                    = aws_key_pair.deployer.key_name
   associate_public_ip_address = true
   subnet_id                   = data.aws_subnet.selected.id
+  iam_instance_profile        = aws_iam_instance_profile.ec2_to_assume.name
 
   vpc_security_group_ids = [
     aws_security_group.allow_ssh.id

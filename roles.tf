@@ -35,6 +35,11 @@ resource "aws_iam_role_policy" "ec2_to_assume" {
   })
 }
 
+resource "aws_iam_instance_profile" "ec2_to_assume" {
+  name = "ec2_to_assume_iprofile"
+  role = aws_iam_role.ec2_to_assume.name
+}
+
 resource "aws_iam_role" "assume_to_s3" {
   name = "assume_to_s3_role"
 
